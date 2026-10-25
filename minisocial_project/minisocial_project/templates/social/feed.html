@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Your feed · MiniSocial{% endblock %}
+{% block content %}
+<div class="layout">
+  <aside class="side-card">
+    <div class="side-intro"><div class="eyebrow">YOUR CORNER OF THE INTERNET</div><h2>Small updates.<br><span>Real connections.</span></h2><p class="muted">Share a thought, cheer someone on, and keep up with your people.</p></div>
+    {% if user.is_authenticated %}
+      <a class="side-link active" href="{% url 'feed' %}">✳ &nbsp; Home feed</a><a class="side-link" href="{% url 'explore' %}">⌕ &nbsp; Find people</a><a class="side-link" href="{% url 'profile' user.username %}">◉ &nbsp; Your profile</a>
+      <div class="side-user"><div class="avatar">{{ user.username|first|upper }}</div><div><strong>@{{ user.username }}</strong><small>You're part of the community</small></div></div>
+    {% else %}<a class="primary-btn full" href="{% url 'signup' %}">Join the conversation</a>{% endif %}
+  </aside>
+  <section class="feed-column">
+    <div class="section-heading"><div><div class="eyebrow">THE LATEST</div><h1>Your feed</h1></div><a class="subtle-link" href="{% url 'feed' %}?following=1">Following only ↗</a></div>
+    {% if user.is_authenticated %}
+    <form class="composer card" method="post" action="{% url 'create_post' %}">{% csrf_token %}<div class="composer-top"><div class="avatar">{{ user.username|first|upper }}</div><div><strong>What's on your mind?</strong><small>Say something worth sharing.</small></div></div>{{ post_form.body }}<div class="composer-bottom"><span class="muted tiny">Be kind. Keep it human.</span><button class="primary-btn">Publish post <span>↗</span></button></div></form>
+    {% else %}<div class="card join-banner"><div><h3>Have something to share?</h3><p class="muted">Join MiniSocial to post, like, comment and follow people.</p></div><a class="primary-btn" href="{% url 'signup' %}">Get started</a></div>{% endif %}
+    {% for post in posts %}
+      {% include "social/_post.html" with post=post %}
+    {% empty %}<div class="empty-state"><div class="empty-icon">✳</div><h3>It's quiet around here.</h3><p>Be the first to post, or explore and follow people to fill your feed.</p><a href="{% url 'explore' %}" class="primary-btn">Explore people</a></div>{% endfor %}
+  </section>
+  <aside class="right-rail"><div class="rail-card"><div class="eyebrow">A LITTLE REMINDER</div><h3>Good things grow when shared.</h3><p class="muted">Follow people whose ideas make your day a bit more interesting.</p><a href="{% url 'explore' %}" class="text-link">Find your people →</a></div><div class="rail-note">Built for conversations, not the noise.</div></aside>
+</div>
+{% endblock %}

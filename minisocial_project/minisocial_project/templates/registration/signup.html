@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Join MiniSocial{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="eyebrow">YOUR PEOPLE ARE HERE</div><h1>Make a little space for you.</h1><p class="muted">Create an account and start sharing.</p>
+  <form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="primary-btn">Create account</button></form>
+  <p class="muted">Already a member? <a href="{% url 'login' %}">Log in</a></p>
+</section>
+{% endblock %}

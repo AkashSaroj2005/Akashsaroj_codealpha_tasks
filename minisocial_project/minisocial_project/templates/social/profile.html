@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}@{{ person.username }} · MiniSocial{% endblock %}
+{% block content %}
+<div class="profile-wrap">
+  <section class="profile-hero card">
+    <div class="profile-cover"></div><div class="profile-main">
+      <div class="profile-avatar">{% if person.profile.avatar_url %}<img src="{{ person.profile.avatar_url }}" alt="Profile photo">{% else %}{{ person.username|first|upper }}{% endif %}</div>
+      <div class="profile-title"><div><div class="eyebrow">COMMUNITY MEMBER</div><h1>{{ person.username }}</h1><p class="muted">@{{ person.username }}</p></div>
+      {% if user.is_authenticated and user != person %}<form method="post" action="{% url 'toggle_follow' person.username %}">{% csrf_token %}<button class="{% if is_following %}secondary-btn{% else %}primary-btn{% endif %}">{% if is_following %}Following ✓{% else %}+ Follow{% endif %}</button></form>{% elif not user.is_authenticated %}<a class="primary-btn" href="{% url 'login' %}">Log in to follow</a>{% endif %}</div>
+      {% if person.profile.bio %}<p class="bio">{{ person.profile.bio }}</p>{% else %}<p class="bio muted">No bio yet — just here to connect.</p>{% endif %}
+      <div class="stats"><div><strong>{{ posts.count }}</strong><span>Posts</span></div><div><strong>{{ follower_count }}</strong><span>Followers</span></div><div><strong>{{ following_count }}</strong><span>Following</span></div></div>
+      {% if user == person %}<details class="edit-profile"><summary>Edit profile</summary><form method="post" action="{% url 'edit_profile' %}" class="stack-form">{% csrf_token %}{{ profile_form.as_p }}<button class="primary-btn">Save changes</button></form></details>{% endif %}
+    </div>
+  </section>
+  <div class="section-heading profile-post-heading"><div><div class="eyebrow">FROM THE NOTEBOOK</div><h2>{{ person.username }}'s posts</h2></div></div>
+  {% for post in posts %}{% include "social/_post.html" with post=post %}{% empty %}<div class="empty-state card"><h3>No posts just yet.</h3><p>When {{ person.username }} shares something, it'll show up here.</p></div>{% endfor %}
+</div>
+{% endblock %}

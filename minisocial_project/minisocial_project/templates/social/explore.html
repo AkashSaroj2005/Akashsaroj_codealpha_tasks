@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Explore people · MiniSocial{% endblock %}
+{% block content %}
+<div class="explore-wrap"><div class="section-heading"><div><div class="eyebrow">MEET SOMEONE NEW</div><h1>Find your people.</h1><p class="muted">Every good conversation starts somewhere.</p></div></div>
+<div class="people-grid">{% for person in users %}<article class="person-card card"><div class="person-top"><div class="profile-avatar small-avatar">{% if person.profile.avatar_url %}<img src="{{ person.profile.avatar_url }}" alt="">{% else %}{{ person.username|first|upper }}{% endif %}</div><div><a href="{% url 'profile' person.username %}"><h3>{{ person.username }}</h3></a><span class="muted tiny">@{{ person.username }}</span></div></div><p class="person-bio">{{ person.profile.bio|default:"Here to connect and share a little." }}</p><div class="person-bottom"><span class="muted tiny">{{ person.follower_total }} follower{{ person.follower_total|pluralize }}</span><a class="text-link" href="{% url 'profile' person.username %}">View profile →</a></div></article>{% empty %}<div class="empty-state card"><h3>You're early!</h3><p>More people will appear here as they join.</p></div>{% endfor %}</div></div>
+{% endblock %}

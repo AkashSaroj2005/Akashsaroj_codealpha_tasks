@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Search · MiniSocial{% endblock %}
+{% block content %}
+<div class="search-results"><div class="section-heading"><div><div class="eyebrow">LOOKING FOR SOMETHING?</div><h1>Search results</h1><p class="muted">{% if query %}Results for “{{ query }}”{% else %}Search people and posts using the bar above.{% endif %}</p></div></div>
+{% if query %}<h2 class="subsection-title">People</h2><div class="people-grid compact">{% for person in users %}<a class="search-person card" href="{% url 'profile' person.username %}"><div class="avatar">{{ person.username|first|upper }}</div><div><strong>{{ person.username }}</strong><small>@{{ person.username }}</small></div><span>→</span></a>{% empty %}<p class="muted">No matching people.</p>{% endfor %}</div><h2 class="subsection-title">Posts</h2>{% for post in posts %}{% include "social/_post.html" with post=post %}{% empty %}<p class="muted">No matching posts.</p>{% endfor %}{% endif %}
+</div>
+{% endblock %}
